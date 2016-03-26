@@ -1,42 +1,40 @@
-In this article I introduce the basics of test-driven development (commonly abbreviated as TDD) by walking through the development of a small project in a test-driven way. The first part focuses on unit tests, and the last part focuses on code coverage.
+_Understanding this tutorial requires prior knowledge of JavaScript basics._
 
-If you want to experiment with the project yourself, there is a [repository hosted on GitHub that puts together all the code from this article](https://github.com/peterolson/Introduction-to-Test-Driven-Development-in-Javascript).
+In this article, I will introduce the basics of Test-Driven Development (TDD) by walking through the creation and development of a small project in a test-driven way. 
 
-## Who this article is aimed at
+The first part of this tutorial focuses on unit tests, and the last part focuses on code coverage.
 
-This articles assumes that you have a basic understanding of writing programs using JavaScript, but it does not assume that you have any prior experience with test-driven development.
+If you want to experiment with the project yourself, there is a [repository hosted on GitHub](https://github.com/peterolson/Introduction-to-Test-Driven-Development-in-Javascript) with all of the code from this article.
 
-If you are relatively inexperienced in JavaScript, some of the patterns used in the code below may seem somewhat unfamiliar or confusing - but that's OK. The purpose of this article is to demonstrate how TDD works, and the nitty-gritty particulars are not so important to understand fully. Feel free to skim through just to get the big picture, and don't worry about working through every single detail.
+Through this article, I hope to demonstrate how TDD works. As such, please feel free to skim through the nitty-gritty particulars if you would like to understand the big picture.
 
 ## What is test-driven development?
 
-Traditionally, the software development workflow is mostly a loop of the following steps:
+Traditionally, the software development workflow comprises the following steps:
 
- 1. Think about what your code is supposed to do.
- 2. Write the code to do it.
- 3. Test the code to see if it works.
+ 1. Think about the task (design).
+ 2. Write the code to accomplish the task (implementation).
+ 3. Test the code to see if it works (testing).
 
-For example, let's say we want to write a function `add(number1, number2)` to add two numbers together. First, we write the `add` function, then we try a few examples to see if it gives the output we expect. We could try running `add(1,1)`, `add(5,7)` and `add(-4, 5)`, and we might get the outputs `2`, `12`, and... oops, there must be a bug somewhere, `-9`.
+Often, writing a successful program requires multiple loops or repeated testing. As a result, testing and revising code comprehensively can take a rather long time.
 
-We revise the code to try to fix the incorrect output, and then we run `add(-4, 5)` again. Maybe it will return `1`, just like we wanted. Just to be safe, we'll run the other examples again to see if they still give the right output. Oops, now `add(5,7)` returns `-2`.
+**Test-driven development changes this workflow process**. TDD involves writing automated tests *before* we write the code. Here is our new workflow:
 
-We'll go through a few cycles of this: we revise our code and then try a few examples until we're sufficiently confident that our code works like we want it to.
+ 1. Think about the task (design).
+ 2. Write tests specifying what you expect your code to do (test setup).
+ 3. Write the code to accomplish the task (implementation).
+ 4. See if the code works by running it against the tests you wrote (testing).
 
-**Test-driven development changes this workflow** by writing automated tests, and by writing tests *before* we write the code. Here is our new workflow:
+So we start writing some test code that specifies the expected output before we write the function or method. This is called *unit testing*. 
 
- 1. Think about what your code is supposed to do.
- 2. Write tests specifying what you expect your code to do.
- 3. Write the code to do it.
- 4. See if the code works by running it against the tests you wrote.
-
-That is, before we even start writing our `add` function, we'll write some test code that specifies what output we expect. This is called *unit testing*. Unit tests might look something like this:
+For a simple add(int,int) function that sums two integers, a unit test might look something like this:
 
 ```javascript
 expect(add(1,1)).toEqual(2);
 expect(add(5,7)).toEqual(12);
 expect(add(-4,5)).toEqual(1);
 ```
-and so on for as many test examples as we like. Then, we will write the `add` function. When we're finished, we can run the test code, and it will tell us whether our function passes all the tests:
+and so on for as many test examples as we like. After creating these tests, we will write the actual add function. When we're finished, we can run the test code, and it will tell us whether our function passes all the tests:
 
 > 2 of 3 tests passed. 1 test failed:  
 > Expected `add(-4,5)` to return `1`, but got `-9`.
@@ -51,28 +49,31 @@ Oops, we fixed one thing but broke other things at the same time. We'll revise t
 
 > 3 of 3 tests passed. Yay!
 
-Of course, just because our code passed the tests it doesn't mean the code works in general, but it does give us a little more confidence about its correctness. And if we find a bug in the future that our tests missed, we can always add more tests for better coverage.
+Of course, just because our code passed the tests it doesn't mean the code works in general, but **it does give us a little more confidence about its correctness**. And if we later find a bug that our tests missed, we can always modify our tests for better coverage.
 
-Many of you might object, "*But what's the point of that? Isn't that just a lot of pointless extra bother?*"
+At this point, you might object, "*But what's the point of that? Isn't this procedure just an extra step?*"
 
-I have to admit, it is true that setting up the testing environment and figuring out how to unit write tests often takes some effort. In the short run, it's faster to just do things the traditional way. But in the long run, test-driven development can save time that would otherwise be wasted manually testing the same thing repeatedly. Besides that, it turns out that there are a number of other benefits to unit testing:
+Admittedly, setting up the testing environment and understanding how to unit write tests often takes some effort. In the short run, it's faster to just do things the traditional way. But in the long run, TDD can save time that would otherwise be wasted by repeated manual testing. And there are a number of other benefits to unit testing:
 
- - **Automatic regression detection** --- Sometimes you'll write a bug in your program that causes code that used to function properly to no longer do so, or you'll accidentally reintroduce an old bug that you had previously fixed. This is called a *regression*. Regressions might sneak by unnoticed for a long time if you don't have any automated testing. Passing your unit tests don't guarantee that your code works correctly, but if you write tests for every bug you fix, one thing passing your unit tests can guarantee is that you haven't reintroduced an old bug.
- - **Bold refactoring** --- Code can get messy pretty quickly, but it's often scary to refactor it, since there's a good chance that you'll break something in the process. After all, code often looks messy because you had to hack together some workarounds to make it work for rare edge cases. When you try to clean it up, or even rewrite it from scratch, it's likely that it will fail on those edge cases. If you have unit tests covering these edge cases, you'll find out immediately when you've broken something and you can make changes more courageously.
- - **Documentation** --- If another developer (or perhaps the future you) can't figure out how to use the code you've written, they can look at the unit tests to see how the code was designed to be used. Unit tests aren't a replacement for real documentation, of course, but they're certainly better than no documentation at all -- and no documentation at all is unfortunately common, since programmers almost always have things higher on their priority lists than writing documentation.
- - **Robustness** --- When you have no automated testing and applications become sufficiently complex, it is easy for the code to feel very fragile. That is, it seems to work alright (most of the time) when you use it, but you have a nagging anxiety that the slightest unexpected action from the user or the slightest future modification to the code will cause everything to crash and burn. Knowing that your code passes a suite of unit tests is more reassuring than knowing that your code seemed to work when you manually tested it with a handful of examples the other day.
+ - **Automatic regression detection** --- Sometimes coders mistakenly create bugs that make their programs defective, or they reintroduce old bugs that had previously been fixed. Such mistakes are called *regressions*. Regressions might sneak by unnoticed for a long time if you don't use automated testing. If you create a unit test for each bug that you fix, any code that passes your unit tests afterwards is guaranteed to be free of any old bugs. As a result, if you encounter errors in the program later on, you can be sure that regression is not the issue. 
 
-Alright, enough with the theory already, let's get our hands dirty and see how this works in practice.
+ - **Bold refactoring** --- Code can get messy pretty quickly whenever we add workarounds to accomplish edge cases and unforeseen tasks. And cleaning up your code could lead to regressions. If you have unit tests covering specifically nasty cases, however, you will know when you have broken something _as well as where your mistake occurred_. As a result, TDD facilitates code cleanup.
+
+ - **Documentation** --- If another developer cannot figure out how to use your code, they can look at your unit tests to see how the code was designed to be used. Unit tests aren't a replacement for real documentation, of course, but they are certainly better than no documentation at all. Unfortunately, having little to no documentation is common because tedious documentation work rarely makes it up a programmers to-do list.
+
+ - **Robustness** --- Without automated testing, it is easy for the code to a complex application to feel very fragile. You might have a nagging anxiety that the slightest unexpected action from the user or the slightest future modification to the code will cause everything to crash and burn. Knowing that your code passes a set of unit tests is more reassuring than knowing that your code seemed to work when you manually tested it with a handful of examples the other day.
+
+Now let's see how TDD works in practice.
 
 # Practical example
 
-In this example, we will go through the process of developing a simple date library in a test-driven way. For each part of the library, we will first write tests specifying how we want it to behave, and then write code to implement that behavior. If the test fails, we know that the implementation does not match the specification.
+In this example, we will go through the process of developing a simple date library in a test-driven way. For each part of the library, we will first write unit tests specifying how we want the date library to behave. Then we will write code to implement that behavior. If a particular test fails, we know that the corresponding implementation does not match its specification.
 
-Keep in mind that the purpose of this code is only to demonstrate test-driven development, and is not a feature-complete date library meant for practical use. If you somehow stumbled upon this article looking for a date library, I can recommend [Moment.js](http://momentjs.com/).
+This date library is simply for testing purposes. It is _not_ intended to be a feature-complete library. If you are looking for a way to create a complete date library, I recommend [Moment.js](http://momentjs.com/).
 
 ## Setting up the testing environment
 
-The first thing we need to do is install a testing library. [QUnit](https://qunitjs.com/), [Mocha](https://mochajs.org/), and [Jasmine](http://jasmine.github.io/2.4/introduction.html) are the most popular ones today, and in my opinion it doesn't matter that much which one you use, since they all essentially do the same thing. For this article I've arbitrarily chosen to use Jasmine. 
+First, install a testing library. [QUnit](https://qunitjs.com/), [Mocha](https://mochajs.org/), and [Jasmine](http://jasmine.github.io/2.4/introduction.html) are the most popular ones today. In my opinion, they both essentially do the same thing, so I've arbitrarily chosen to use Jasmine. 
 
 Here's how I set things up:
 
@@ -101,7 +102,7 @@ With that out of the way, now we can start building our library.
 
 ## DateTime.js API
 
-Feel free to quickly skim through this section to just get a basic idea of what our date library will do. There's no need to remember every single detail in here; you can always refer back to this section if you are confused about the intended behavior of the code.
+Feel free to quickly skim through this section to just get a basic idea of what our date library will do. There's no need to remember every detail in here; you can always refer back to this section if you are confused about the code's intended behavior.
 
 `DateTime` is a function that constructs dates in one of the following ways:
 
@@ -151,9 +152,17 @@ and the following properties
 
 ## Getting started
 
-The first thing we need to do is to decide on some minimal subset of the API to implement, and then incrementally build on top of that until we're finished. One reasonable place to start is making a `DateTime` constructor that returns an object representing the current time.
+Here is a brief explanation of some Jasmine functions. You can read more details from the [Jasmine docs](http://jasmine.github.io/2.4/introduction.html).
 
-First, we should write a unit test that specifies what we expect `DateTime` to do. In `DateTimeSpec.js`, we'll write our first test. If you don't understand what this test code is doing yet, don't worry; I'll explain it shortly.
+ - `describe("DateTime", ...)` - this creates a test group (or "suite") named "DateTime". We will put any tests specifying the behavior of `DateTime` inside of this test suite.
+ - `it(testName, ...)` - this creates a test (or "spec") with the given name. As a general rule, the spec name should read like the predicate of a sentence with the name of the test group as an implied subject (in our case, `DateTime`). For this reason, the function is named `it` to encourage you to read the spec name like a sentence starting with the word "it".
+   - Good name: [It] returns the current time when called with no arguments
+   - Bad name: [It] no arguments returns current time
+ - `expect` - this specifies what the spec expects to happen. If all the expectations in a spec are met, then the spec passes. If at least one expectation is not met, or an unhandled exception is thrown, then the spec fails.
+
+The first thing we need to do is to decide on some minimal subset of the API to implement, and then build on top of that until we're finished. We will start by writing a unit test that specifies what we expect `DateTime` to do. 
+
+In`DateTimeSpec.js`, create the first few unit tests. 
 
 ```javascript
 describe("DateTime", function () {
@@ -171,18 +180,11 @@ Now open `SpecRunner.html` and click on "Spec List". You should see 1 failing te
 
 ![1 spec, 1 failure; DateTime uses the current time when called with no arguments](http://i.stack.imgur.com/zNO6v.png)
 
-If you click "Failures" you will see some message about a ReferenceError because DateTime is not defined. That is exactly what should happen, since we haven't written any code defining `DateTime` yet.
+If you click "Failures" you will see some message about a ReferenceError because DateTime is not defined. _That is exactly what should happen, since we haven't written any code defining `DateTime` yet._
 
-In case test code above didn't make sense to you, here is a brief explanation of the Jasmine functions. You can read more details from the [Jasmine docs](http://jasmine.github.io/2.4/introduction.html).
+   In this case, we want to see whether `DateTime()` actually returns the current time. In the test code above, I recorded the time before and after we called `DateTime()`, and then tested if the time returned by `DateTime` was between these two limits.
 
- - `describe("DateTime", ...)` - this creates a test group (or "suite") named "DateTime". We will put any tests specifying the behavior of `DateTime` inside of this test suite.
- - `it(testName, ...)` - this creates a test (or "spec") with the given name. As a general rule, the spec name should read like the predicate of a sentence with the name of the test group as an implied subject (in our case, `DateTime`). For this reason, the function is named `it` to encourage you to read the spec name like a sentence starting with the word "it".
-   - Good name: [It] returns the current time when called with no arguments
-   - Bad name: [It] no arguments returns current time
- - `expect` - this specifies what the spec expects to happen. If all the expectations in a spec are met, then the spec passes. If at least one expectation is not met, or an unhandled exception is thrown, then the spec fails.
-   In this case, we want to test whether `DateTime()` actually returns the current time. In the test code above, I recorded the time before and after we called `DateTime()`, and then tested if the time returned by `DateTime` was between these two limits.
-
-Now that we've finished writing our first test, we can write code to implement the features we are testing. In the `DateTime.js` file, paste the following code:
+Now that we've finished writing our first test, we can write code to implement the features we are testing. In the `DateTime.js` file, paste the following code that **creates our DateTime object**:
 
 ```javascript
 "use strict";
@@ -202,7 +204,7 @@ var DateTime = (function () {
 })();
 ```
 
-When we open `SpecRunner.html` our test should pass:
+When we open `SpecRunner.html` our test should pass because DateTime is now a defined object:
 
 ![1 spec, 0 failures](http://i.stack.imgur.com/KHMPk.png)
 
@@ -225,19 +227,19 @@ I've chosen four dates to test: the current date, and three dates that are poten
  - [the maximum valid JavaScript date](http://stackoverflow.com/q/12666127/546661) (September 13, 275760, i.e. 100 million days after the epoch), and
  -  [the minimum valid JavaScript date](http://stackoverflow.com/q/12666127/546661) (April 20, 271822 B.C., i.e. 100 million days before the epoch).
 
-Testing all of these may seem a little superfluous, since we're just writing a wrapper around the native `Date` object and there's not any complicated logic going on. That said, as a general rule, it's a good idea to use potential edge cases in your tests to increase the chances of finding bugs sooner.
+Testing all of these may seem a little superfluous. After all, we're only writing a wrapper around the native `Date` object and there's not any complicated logic going on. Nonetheless, as a general rule, it's a good idea to use potential edge cases in your tests to increase the chances of finding bugs sooner.
 
 There are still two important issues we haven't specified anything about yet in our tests.
 
  1. What should happen when we pass in a single argument to `DateTime` that is not a `Date` object?
  2. What should happen when we pass in a `Date` object that is invalid, such as `new Date(1e99)` or `new Date("Invalid string")`?
 
-There are lots of possible answers to these two questions depending on your error handling philosophy, and discussing such philosophical quandaries is outside the scope of this article. I chose the following strategies for dealing with these two issues:
+There are lots of possible answers to these two questions depending on how you choose to handle your errors. I typically choose one of the following strategies for dealing with these issues:
 
  1. Throw an error.
  2. Continue without throwing an error. All the native `Date` methods we use will return `NaN` in this situation, so our `DateTime` properties and methods will propagate this behavior automatically.
 
-Don't think too hard about what the reasoning is behind these choices, because there isn't much reasoning behind them. I made these choices mostly so that I could demonstrate how to write tests that expect errors to be thrown and tests that expect `NaN`. In any case, regardless of what behavior we might decide on, we should write tests that codify that behavior - so here we go:
+Regardless of what behavior we might decide on, we should write tests that codify that behavior:
 
 ```javascript
 it("throws an error when called with a single non-Date argument", function () {
@@ -256,9 +258,9 @@ it("returns a NaN offset when an invalid date is passed in", function () {
 
 This is fairly straightforward, except for the `DateTime.bind` part. The [function binding](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind) is used because (1) `.toThrow()` assumes a function was passed to `expect`, and (2) [creating a function inside of a loop in the straightforward way behaves somewhat counter-intuitively in JavaScript](http://stackoverflow.com/q/750486/546661).
 
-When we open `SpecRunner.html` now we should see that the three specs we just wrote all failed. This is an important thing to check: if a spec passes before we write the implementation code, that usually means we made a mistake while writing the spec.
+When we open `SpecRunner.html` now we should see that the three specs we just wrote all failed. This is an important thing to check: **if a spec passes before we write the implementation code, that usually means we made a mistake while writing the spec.**
 
-Now we can write the implementation:
+Now we can implement the code:
 
 ```javascript
 // ...
@@ -273,7 +275,7 @@ return function (date) {
 };
 ```
 
-All the tests should pass.
+At this point, all of the tests should pass.
 
 ## Getters
 
