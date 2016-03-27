@@ -279,9 +279,9 @@ At this point, all of the tests should pass.
 
 ## Getters
 
-The easiest next step is to implement all the property getters. Writing tests for all of them is straightforward, although a little tedious. All that's involved is looping through some test dates and making sure that all the property getters return the expected values for these test dates.
+The easiest next step is to implement the property getters. Writing tests for all of them is straightforward, although a little tedious. Simply loop through some test dates and make sure that all the property getters return the expected values.
 
-When choosing test dates it's a good idea to include both typical dates as well as some potential edge cases.
+When choosing test dates it's a good idea to include both typical dates as well as edge cases.
 
 ```javascript
 var testDates = [
@@ -330,7 +330,7 @@ describe("getter", function () {
 });
 ```
 
-All the new tests we just wrote should fail now, except the one corresponding to the `offset` property, since we already implemented the getter for `offset`.
+All the new tests we just wrote **should fail now**, except the one corresponding to the `offset` property, since we already implemented the getter for `offset`.
 
 Now that we've written the tests we can write the implementation code.
 
@@ -385,14 +385,16 @@ function createDateTime(date) {
 }
 ```
     
-I made quite a few mistakes in the process of writing the code above that the tests helped me catch. Most of them were fairly trivial and uninteresting mistakes that I would probably have eventually found anyway, but there is one subtler bug that I have left in the code above that I want to show you now.
+I made quite a few mistakes in the process of writing the code above that the tests helped me catch. While most of these errors were trivial and easy to spot, there is one subtle bug that I have intentionally left in the code above. 
 
-When I run the tests I see 8 failed specs. This number might vary depending on your time zone. Here is one of my failed expectations:
+When I run the tests, I see 8 failed specs. Here is one of my failed expectations:
 
 > DateTime getter returns expected values for property 'monthName'  
 > Expected 'December' to equal 'November'.
 
-This is caused by the `2111-11-30T22:01:10` date. My `monthName` getter says this is December instead of November. This is because I live in the GMT+8 timezone, so something behind the scenes is converting the time from GMT into my timezone, resulting in `2111-12-01 06:01:10`. The solution to this problem is to use the `getUTCMonth` method instead of the `getMonth` method to prevent this conversion:
+This is caused by the `2111-11-30T22:01:10` date. My `monthName` getter says this is December instead of November. This is because I live in the GMT+8 timezone, so something behind the scenes is converting the time from GMT into my timezone, resulting in `2111-12-01 06:01:10`. So we must consider time zone when creating our date library.
+
+The solution to this problem is to use the `getUTCMonth` method instead of the `getMonth` method to prevent this conversion:
   
 ```javascript
 get monthName() {
@@ -448,7 +450,7 @@ return {
 };
 ```
 
-After these modifications, all the tests should pass now. This type of bug is a bit nasty because the unit tests might not catch it if your timezone is close to GMT, and I'm not sure that I would have even noticed it if I hadn't written the unit tests.
+After these modifications, all the tests should pass now. This type of bug is a bit nasty because the unit tests might not catch it if your timezone is close to GMT. **But I'm not sure that I would have even noticed it if I hadn't written the unit tests.**
 
 ## Setters
 
@@ -456,13 +458,15 @@ Now that we've implemented all the getters, the obvious next step is to implemen
 
 Fortunately, to write tests for the setters, we don't need to create any more test dates or expected values, we can just reverse the process we used for the getter tests. Before, we had some date, such as`2008-09-24T08:48:56`, and we were checking that the year property returned `2008`, the month property returned `9`, and so on. 
 
-This time, we will create a date, set it's year property to `2008`, set it's month property to `9`, and so forth, and check that it's offset is the same as the offset for `2008-09-24T08:48:56`. We have some overlapping properties, like `month` and `monthName` that set the same information, and `offset` which affects everything else, so we will do three passes to test all of the properties:
+This time, we will create a date, set its year property to `2008`, set its month property to `9`, and so forth, and check that its offset is the same as the offset for `2008-09-24T08:48:56`. 
+
+We have some overlapping properties, like `month` and `monthName` that set the same information, and `offset` which affects everything else, so we will do three passes to test all of the properties:
 
  - In the first pass we'll use the `year`, `month`, `date`, `hours`, `minutes`, and `seconds` properties.
  - In the second pass we'll use the `year`, `monthName`, `ordinalDate`, `ampm`, `hours12`, `minutes`, and `seconds` properties.
  - In the third pass we'll use the `offset` property.
 
-Here's the code for the setter unit tests:
+Here is the code for the setter unit tests:
 
 ```javascript
 describe("setter", function () {
@@ -485,7 +489,7 @@ describe("setter", function () {
 
 As usual, when you run these tests, they should all fail since we haven't written the setter code yet.
 
-Finally, the only property left is the `day` property, which is readonly. In JavaScript, writing to readonly properties fails silently by default:
+Finally, the only property left is the `day` property, which is read-only. _In JavaScript, writing to read-only properties fails silently by default:_
 
 ```javascript
 > var obj = { get readonlyProperty() { return 1; } };
@@ -496,7 +500,9 @@ Finally, the only property left is the `day` property, which is readonly. In Jav
 1
 ```
 
-In my opinion, this is bad design: there's no warning when you try to write to a property without a setter and you might waste time later trying to figure out why it didn't work. Instead, we should throw an error when an attempt is made to write to `day`. Let's specify that with a test:
+In my opinion, this silent failure is bad design. Without a warning when you try to write to a property without a setter, you might waste time later trying to figure out why it didn't work. Instead, we should throw an error when an attempt is made to write to `day`. 
+
+**This modification is another use case of TDD testing.** So let's specify that with a test:
 
 ```javascript
 it("throws an error on attempt to write to property 'day'", function () {
@@ -559,11 +565,11 @@ set offset(v) {
 }
 ```
 
-All the tests should pass now.
+All our setter tests should pass now.
 
 ## Formatting and parsing
 
-The only things left now are the `DateTime(dateString, formatString)` constructor and the `toString(formatString?)` method. The two of these are related, since they both involve a format string, so I'm including both of them in this section.
+The only things left now are the `DateTime(dateString, formatString)` constructor and the `toString(formatString?)` method. The two of these are related, since they both involve a format string.
 
 We can reuse the same test dates from before, but we need to specify what strings we expect from them given different formats:
 
@@ -575,12 +581,12 @@ var expectedStrings = {
 };
 ```
 
-Once we've constructed this object, it's straightforward to write the tests:
+Once we've constructed this object, writing the tests is straightforward:
 
  - For `toString`, we go through all the test dates (e.g. `1970-07-18T18:36:42`) and see if they return the expected string for each of the formats (e.g.  `"1970-7-18 18:36:42"` for `"YYYY-M-D H:m:s"`).
- - For the `DateTime(dateString, formatString)` constructor, we go through all the pairs of formats and date strings (e.g. `"1970-7-18 18:36:42"` and `"YYYY-M-D H:m:s"`) and make sure the constructed object has the same offset as the corresponding test date.
+ - For the `DateTime(dateString, formatString)` constructor, we go through all the pairs of formats and date strings (e.g. `"1970-7-18 18:36:42"` and `"YYYY-M-D H:m:s"`) to make sure that each constructed object has the same offset as the corresponding test date.
 
-Here that is expressed in code:
+Or, as expressed in code:
 
 ```javascript
 describe("toString", function () {
@@ -604,7 +610,7 @@ it("parses a string as a date when passed in a string and a format string", func
 
 As usual, these tests should fail if we run them now.
 
-Here's the implementation code to add these features. This is the most complicated part of the library, so the code here is not as simple as the code we've written up to this point. Feel free to just skim through this code to get the big picture without analyzing the finer details.
+Here's the implementation code to add these features. **This is the most complicated part of the library**, so the code here is not as simple as the code we've written up to this point. Feel free to just skim through this code to get the big picture without analyzing the finer details.
 
 ```javascript
 "use strict";
@@ -735,7 +741,7 @@ var DateTime = (function () {
 })();
 ```
 
-Now all the tests should pass. The process of writing this part was where the unit tests became the most useful. Since the amount and complexity of the code here is relatively greater here, there were lots of bugs that I encountered while writing this that the tests helped me spot quickly.
+Now all tests should pass. The unit tests were the most useful during this part; the pre-designed tests helped me **quickly** spot bugs that would otherwise get lost in the framework of my code. 
 
 I haven't detailed all of the iterations of mistakes and fixes that I went through writing this, since they were mostly trivial and uninteresting mistakes. That said, I do want to point out how illuminating (and humbling) this process is: the number of mistakes you make while writing code can be surprisingly large.
 
@@ -743,17 +749,17 @@ It might seem like we're finished now, since we've written all of the features a
 
 # Code coverage
 
-Code coverage tools are used to help you find untested code. They attach counters to each statement in the code, and alert you of any statements that are never executed. Code coverage is often expressed as a percentage; for example, 85% code coverage means that 85% of the statements in the code were executed.
+Code coverage tools are used to help you find untested code. They attach counters to each statement in the code to **alert you of any statements that are never executed**. Code coverage is often expressed as a percentage; for example, 85% code coverage means that 85% of the statements in the code were executed.
 
-If you have low code coverage, it is usually a good indication that your tests are incomplete. Of course, having 100% code coverage is no guarantee that your unit tests can catch every potential bug, but in general, there are more defects in untested code than in tested code.
+**If you have low code coverage, it is usually a good indication that your tests are incomplete.** Of course, having 100% code coverage is no guarantee that your unit tests can catch every potential bug, but, in general, there are more defects in untested code than in tested code.
 
-Code coverage is an especially useful tool when writing tests for large projects that don't already have any unit tests.
+Code coverage is an especially useful tool when writing tests for large projects that lack pre-existing unit tests.
 
 ## Setting up code coverage
 
-For this we will need [Node.js](https://nodejs.org/en/), so first install Node if you don't have it already.
+For this we will need to install [Node.js](https://nodejs.org/en/).
 
-We will use [Karma](http://karma-runner.github.io/0.13/index.html) for running the code coverage tests. In the instructions below I assume that you have Chrome, [but it's easy to modify which browser you use](http://karma-runner.github.io/0.10/config/browsers.html).
+We will use [Karma](http://karma-runner.github.io/0.13/index.html) for running the code coverage tests. In the instructions below, I assume that you have Google Chrome, [but it's easy to modify which browser you use](http://karma-runner.github.io/0.10/config/browsers.html).
 
 Create a file in your project called `package.json` with the following content:
 
@@ -791,17 +797,15 @@ module.exports = function(config) {
 };
 ```
 
-If you use Windows, open the Node.js command prompt. Otherwise, just open your terminal. Navigate to your project folder and run `npm install`. 
+If you use Windows, open the Node.js command prompt. Otherwise, just open your terminal and navigate to your project folder. Then run `npm install`. 
 
-Once it's done installing, you can run `npm test` whenever you want to run the coverage tests. It will create a `coverage` folder with a subfolder corresponding to the name of your browser. Open the `index.html` file in that folder to see the code coverage report.
+Once it's done installing, you can run `npm test` whenever you want to run the coverage tests. It will create a `coverage` folder with a subfolder corresponding to your browser name. Open the `index.html` file in that folder to see the code coverage report.
 
 ## Going through the code coverage report
 
-The code coverage highlights unexecuted lines of code in red, 
+The code coverage highlights unexecuted code in red, 
 
-![unexecuted line of code](http://i.stack.imgur.com/nWlVW.png)
-
-and unevaluated logical branches in yellow.
+![unexecuted line of code](http://i.stack.imgur.com/nWlVW.png) and unevaluated logical branches in yellow.
 
 ![unevaluated conditional branch](http://i.stack.imgur.com/RzoRZ.png)
 
@@ -816,7 +820,7 @@ At this point, the code coverage report shows that the unit tests cover 96% of t
         });
     });
     ```
- - There are no tests that try to set `monthName` to an invalid month name. We can add some to the `describe("setter", ...)` section:
+ - There are no tests that attempt setting `monthName` to an invalid month name. We can add some to the `describe("setter", ...)` section:
 
     ```javascript
     it("throws an error on attempt to set property `monthName` to an invalid value", function () {
@@ -862,16 +866,15 @@ Now the tests should cover 100% of the lines and branches of the code.
 
 # Conclusion
 
-Congrats! If you've read through this far, you should have a basic idea of
+Congrats! If you've read through this far, you should understand
 
- - what unit testing is,
- - what the benefits of unit testing are,
- - how to write unit tests,
- - what code coverage is, and
- - how to run code coverage tests.
+ - unit testing and its benefits,
+ - the ways of writing basic unit tests,
+ - code coverage,
+ - running coverage tests.
 
-This should be enough for you to get started with test-driven development in your own projects.
+These steps should be enough for you to get started with TDD in your own projects.
 
-If you work on collaborative projects, especially open-source ones, I would also recommend you to read up on Continuous Integration (CI) testing. [Travis CI](https://travis-ci.org/) is a popular CI server that automatically runs tests after every push to GitHub, and [Coveralls](https://coveralls.io/) similarly runs code coverage tests after every push to GitHub.
+If you work on collaborative projects, especially open-source ones, I would also recommend that you read up on Continuous Integration (CI) testing. [Travis CI](https://travis-ci.org/) is a popular CI server that automatically runs tests after every push to GitHub, and [Coveralls](https://coveralls.io/) is a server that runs code coverage tests after every push to GitHub.
 
-If you have any questions for me, feel free to leave a comment below.
+I hope this (long) explanation elucidated the advantages of test-driven development. If you have any questions for me, feel free to leave a comment below.
