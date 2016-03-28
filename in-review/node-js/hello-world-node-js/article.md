@@ -4,50 +4,43 @@
 
 <hr/>
 <h1>Introduction</h1>
-Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. 
+
+Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js is especially efficient and lightweight because it uses an event-driven, non-blocking I/O model.
 <br/><br/>
-V8 is Google's open source high-performance JavaScript engine, written in C++ and used in Google Chrome, the open source browser from Google.V8 can run standalone, or can be embedded into any C++ application.
+V8 is Google's open source high-performance JavaScript engine, written in C++ and used in Google Chrome, which is Google's open-source web browser. V8 can run alone or can be embedded into any C++ application.
 <br/><br/>
 <hr/>
 <h1>Installation</h1>
 
-To install Node.js on your machine using your terminal :
+To install Node.js on your machine using the terminal:
 
-<br/><br/>
-
-_first lets update our packages_
+First we will update our packages
 
 ```
 hassan@home:~$ sudo apt-get update
 ```
-<br/>
-_now we will install node.js using this command_
 
+Then we will install node.js using this command
 
 ```
 hassan@home:~$ sudo apt-get install nodejs
 
 ```
 
-<br/>
+Next we will install the **node package manager** (or npm), which is the default package manager for Node.js.
 
-
-Now we need to install **npm** (the node package manager) is the default package manager for the JavaScript runtime environment Node.js.
-
-_use this command to install the node package manager_
+In case you do not have npm already installed, use this command to install it:
 
 ```
 hassan@home:~$ sudo apt-get install npm
 
 ```
 
-<hr/>
 <h1>Hello World</h1>
 
-lets create our first simple hello world application using node.js , whats fascinating about node is that you start from the ground up by creating a server and handling requests and response , check this out :
+Let's create our first simple task: a hello world application using Node.js. The most fascinating part about Node is that it allows users to start from the ground-up. We first create a server, then handle requests and responses. 
 
-<br/>
-_create a file index.js on you application directory_
+For instance, suppose we create a file index.js on the application directory.
 
 ```javascript
 // requiring the HTTP interfaces in node
@@ -69,45 +62,40 @@ http.createServer(function (req, res) {
 console.log('Server running on port 8080.');
 ```
 
-Now run the the application using the following command :
+Then we run the the application using the following command:
 
 ```
 hassan@home:~$ node index.js
 ```
 
-your application is running on port 8080 now so just open your browser and hit http://localhost:8080
+If you open Chrome and hit http://localhost:8080, you will see your application as it's running on Port 8080.
 
-<br/>
 <hr/>
 <h1>How to use npm ? </h1>
 
-the node package manager will give you the ability to install modules that other people develop and published on https://www.npmjs.com.
+NPM will give you the ability to crowd-source, or install modules that other people develop and publish on (the npm main site) [https://www.npmjs.com].
 
-using npm will reflect everything you install on a package.json file that lists all modules and information about your application.
+Using npm will reflect everything you install on a package.json file which lists all modules and information about your application.
 
-all the modules you install will be placed in a node_modules folder on the root of your application and you can use any module by requiring it exactly like the http module.
+All modules that you install will be placed in a node_modules folder on the root of your application. You can use any module by requiring it exactly like the HTTP module.
 
-lets create the package.json file :
+Let's create the package.json file :
 
  ```
 hassan@home:~$ sudo npm init 
 
 ```
 
-the command will prompt you with some questions about your application to add to the package.json file.
-
-now lets install the express framework module as an example :
+The command will prompt you with some questions about your application to add to the package.json file. Now we can install the Express framework module as an example :
 
  ```
 hassan@home:~$ npm install express
 
 ```
 
-if you get any errors just try it again with "sudo" before it.
-
+If you get any errors, just try the same command again, but with "sudo" before "npm install express".
 
 <hr/>
-<br/>
 <h1>Hello world using express</h1>
 
 ```javascript
@@ -121,3 +109,4 @@ app.get('/', function (req, res) {
 app.listen(8080)
 ```
 
+Hello World should now appear. 
