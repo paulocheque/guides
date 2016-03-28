@@ -8,19 +8,20 @@
 Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js is especially efficient and lightweight because it uses an event-driven, non-blocking I/O model.
 <br/><br/>
 V8 is Google's open source high-performance JavaScript engine, written in C++ and used in Google Chrome, which is Google's open-source web browser. V8 can run alone or can be embedded into any C++ application.
-<br/><br/>
+
+
 <hr/>
 <h1>Installation</h1>
 
 To install Node.js on your machine using the terminal:
 
-First we will update our packages
+First we will update our packages.
 
 ```
 hassan@home:~$ sudo apt-get update
 ```
 
-Then we will install node.js using this command
+Then we will install node.js using the below command.
 
 ```
 hassan@home:~$ sudo apt-get install nodejs
@@ -71,7 +72,7 @@ hassan@home:~$ node index.js
 If you open Chrome and hit http://localhost:8080, you will see your application as it's running on Port 8080.
 
 <hr/>
-<h1>How to use npm ? </h1>
+<h1>How do we use npm</h1>
 
 NPM will give you the ability to crowd-source, or install modules that other people develop and publish on (the npm main site) [https://www.npmjs.com].
 
@@ -86,7 +87,7 @@ hassan@home:~$ sudo npm init
 
 ```
 
-The command will prompt you with some questions about your application to add to the package.json file. Now we can install the Express framework module as an example :
+The command will prompt you with some questions about your application to add to the package.json file. Now we can install the Express framework module as an example:
 
  ```
 hassan@home:~$ npm install express
@@ -96,7 +97,7 @@ hassan@home:~$ npm install express
 If you get any errors, just try the same command again, but with "sudo" before "npm install express".
 
 <hr/>
-<h1>Hello world using express</h1>
+<h1>Hello world using Express</h1>
 
 ```javascript
 var express = require('express')
