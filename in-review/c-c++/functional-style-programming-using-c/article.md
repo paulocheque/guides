@@ -1,59 +1,33 @@
 > LEARNING PROGRAMMING AND LEARNING PROGRAMMING LANGUAGE ARE
-NOT THE SAME. MOST OF OUR TEXT BOOKS TEACH US PROGRAMMING LANGUAGE. 
-IN FACT, A PROGRAMMING LANGUAGE IS JUST A TOOL TO IMPLEMENT A PROGRAM THAT CAN BE EXECUTED ON THE COMPUTER. WE NEED
-A GOOD BOOK THAT TEACHES US HOW TO SOLVE PROBLEMS USING A PROGRAMMING LANGUAGE.
+NOT THE SAME. MOST OF OUR TEXTBOOKS TEACH US PROGRAMMING LANGUAGES.
+IN FACT, A PROGRAMMING LANGUAGE IS JUST A TOOL THAT WE USE TO IMPLEMENT AN EXECUTABLE PROGRAM. WE NEED RESOURCES THAT TEACH US HOW TO _SOLVE PROBLEMS_ USING A PROGRAMMING LANGUAGE.
 
 
 Introduction
 ========================================================================================================
-#### Good to read it
 
-From the elementary school, we learned what is a mathematical function and how to write it. For
-example - ``` f(x)=x^2``` is a simple square function of arithmetic.
+As early as elementary school, we learned what is a mathematical function and how to write it. For
+example - ``` f(x)=x^2``` is a simple quadratic function.
 
-A function describes a mathematical statement. The above function is
-basically a mapping between two sets of natural number as given at the
-right in figure \[fig:func1\]. Often it is impossible to show a mapping
-graphically when we have large or infinite number of discrete elements
-in one of the sets. Therefore, for convenience we express a function by
-writing the inherent relation between the sets.
+A function describes a mathematical statement. The above function is basically a mapping between two sets of natural number as given at the right in figure \[fig:func1\]. Often it is impossible to show such a mapping graphically when we have large or infinite number of discrete elements in one of the sets. Therefore, for convenience we express a function by writing the inherent relation between the sets.
 
 \[fig:func1\]
 
-This is perhaps the simplest way when we deal with sets of numerics
-(integer, natural number, real numbers, complex numbers, etc.).
+This is perhaps the simplest way to demonstrate relationships when we deal with sets of numbers (integer, natural number, real numbers, complex numbers, etc.).
 
-We can also think of a function as a system/machine which has some
-inputs, an output and a mechanism that produces the output solely from
-the inputs. The sets to which the inputs and output are belongs to are
-also important. A function often (not always) has a name so that we can
-identify it uniquely. Typically a function is deterministic, means that
-it can produce only a single output from an unique set of inputs.
+We can also think of a function as a system/machine which has some inputs, an output and a mechanism that produces the output solely from the inputs. The sets to which the inputs and output belong to are also important. A function often (not always) has a name that allows us to identify the command. Typically a function is deterministic, or it can produce only a single output from an unique set of inputs.
 
 **Philosophical Background**
 ----------------------------
 
-Using different mathematics we tends to solve problems of various
-domains.
+Using different mathematical strategies, we can solve problems of various domains.
 
-One philosophical foundation of computer programming was to represent or
-express all kinds of mathematical problems by a single language and
-solve them using a generalized mathematics. The result was two
-equivalent systems - <span><span> **Turing machine**</span></span> and
-<span><span> **lambda calculus**</span></span>.
+One philosophical foundation of computer programming was to represent or express all kinds of mathematical problems by a single language and solve them using a generalized mathematics. The result was two equivalent systems - <span><span> **Turing machine**</span></span> and <span><span> **lambda calculus**</span></span>.
 
-Turing machine influenced imperative programming paradigm such as that
-of <span><span> *Assembly*</span></span>, <span><span>
-*C*</span></span>, <span><span> *C++*</span></span>, <span><span>
-*Java*</span></span>, <span><span> *Ruby*</span></span>, <span><span>
-*Python*</span></span>, etc. languages. On the other hand, lambda
-calculus influenced birth of several functional languages such as
-<span><span> *LISP*</span></span>, <span><span> *ML*</span></span>,
-<span><span> *Haskell*</span></span>, <span><span>
-*Erlang*</span></span>, etc.
+Turing machine influenced imperative programming paradigm such as that of <span><span> *Assembly*</span></span>, <span><span> *C*</span></span>, <span><span> *C++*</span></span>, <span><span> *Java*</span></span>, <span><span> *Ruby*</span></span>, <span><span> *Python*</span></span>, etc. languages. On the other hand, lambda calculus influenced birth of several functional languages such as <span><span> *LISP*</span></span>, <span><span> *ML*</span></span>, <span><span> *Haskell*</span></span>, <span><span> *Erlang*</span></span>, etc.
 
-Although we can solve many more problems using those programming
-languages than that of mathematics learnt in our high school, it is
+Although we can solve many more problems by using those programming
+languages than by using high school math, it is
 often easy to learn programming by solving smaller problems first. In
 this book (or booklet), we will learn how to solve a problem of known
 category. At the beginning, we will see how a simple arithmetic function
