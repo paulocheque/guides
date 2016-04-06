@@ -1,3 +1,8 @@
+### Profiling Python's core collection data structures by Luke Lee
+- [Read the guide](http://tutorials.pluralsight.com/python/profiling-python-s-core-collection-data-structures?status=in-review)
+- [Read more from Luke Lee](http://tutorials.pluralsight.com/author/durden) <img src="https://avatars.githubusercontent.com/u/58063?v=3" width="30" height="30" alt="Luke Lee" />
+- Related to: Python
+
 ### Globalization with Attached Properties in WPF by Murat Aykanat
 - [Read the guide](http://tutorials.pluralsight.com/microsoft-net/globalization-with-attached-properties-in-wpf?status=in-review)
 - [Read more from Murat Aykanat](http://tutorials.pluralsight.com/author/aykanatm) <img src="https://avatars.githubusercontent.com/u/9140297?v=3" width="30" height="30" alt="Murat Aykanat" />
@@ -100,7 +105,7 @@
 
 ### Simple debugging with meta programming by Luke Lee
 - [Read the guide](http://tutorials.pluralsight.com/python/simple-debugging-with-meta-programming?status=in-review)
-- [Read more from Luke Lee](http://tutorials.pluralsight.com/user/durden) <img src="https://avatars.githubusercontent.com/u/58063?v=3" width="30" height="30" alt="Luke Lee" />
+- [Read more from Luke Lee](http://tutorials.pluralsight.com/author/durden) <img src="https://avatars.githubusercontent.com/u/58063?v=3" width="30" height="30" alt="Luke Lee" />
 - Related to: Python
 
 ### How I wrote an ~100B grid system by IonicaBizau
